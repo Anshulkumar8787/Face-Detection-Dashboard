@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Detection AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>👤 Face Detection AI</h1>
+        <p>Upload a photo and let AI find every face in it.</p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" id="uploadForm">
+
+        <div id="dropArea" class="drop-area">
+            <p class="drop-text">Drag & Drop a Photo Here</p>
+            <p>or</p>
+            <input type="file" id="imageInput" name="image" accept=".jpg,.jpeg,.png" hidden>
+            <button type="button" id="browseBtn" class="browse-btn">Choose Photo</button>
+        </div>
+
+        <img id="preview" class="preview" style="display:none;">
+
+        <div class="camera-card">
+            <h3>📷 Or Use Your Webcam</h3>
+            <div class="camera-buttons">
+                <button type="button" id="startCameraBtn">📷 Open Camera</button>
+                <button type="button" id="captureBtn" style="display:none;">📸 Capture</button>
+                <button type="button" id="retakeBtn" style="display:none;">🔄 Retake</button>
+            </div>
+            <video id="camera" autoplay playsinline style="display:none;"></video>
+            <canvas id="cameraCanvas" style="display:none;"></canvas>
+        </div>
+
+        <div id="loading" class="loading">🤖 Scanning for faces...</div>
+
+        <div class="button-group">
+            <button type="submit" id="predictBtn" class="predict-btn">Detect Faces</button>
+            <button type="button" id="clearBtn" class="clear-btn">Clear</button>
+        </div>
+
+    </form>
+
+    {% if warning %}
+    <div class="warning">{{ warning }}</div>
+    {% endif %}
+
+    {% if result and not result.error %}
+    <div class="result">
+
+        <h2>🤖 Result: {{ result.faces_found }} Face(s) Found</h2>
+        <p class="engine-tag">Engine: {{ result.engine }}</p>
+
+        <div class="image-compare">
+            <div class="image-box">
+                <h3>Original</h3>
+                <img src="{{ url_for('uploaded_file', filename=result.original) }}">
+            </div>
+            <div class="image-box">
+                <h3>Detected</h3>
+                <img src="{{ url_for('uploaded_file', filename=result.detected) }}">
+                <a href="{{ url_for('uploaded_file', filename=result.detected) }}" download class="download-link">⬇ Download</a>
+            </div>
+        </div>
+
+        {% if result.boxes and result.boxes[0].confidence is defined %}
+        <table class="confidence-table">
+            <thead>
+                <tr><th>Face #</th><th>Confidence</th></tr>
+            </thead>
+            <tbody>
+                {% for box in result.boxes %}
+                <tr><td>{{ loop.index }}</td><td>{{ box.confidence }}%</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+    </div>
+    {% elif result and result.error %}
+    <div class="warning">{{ result.error }}</div>
+    {% endif %}
+
+    {% if history %}
+    <div class="history-section">
+
+        <div class="stats-bar">
+            <div class="stat-card">
+                <span class="stat-number">{{ history|length }}</span>
+                <span class="stat-label">Photos Scanned</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">{{ total_faces }}</span>
+                <span class="stat-label">Total Faces Found</span>
+            </div>
+        </div>
+
+        <div class="history-header">
+            <h2>📜 Detection History</h2>
+            <a href="/clear_history" onclick="return confirm('Clear all history?')">
+                <button id="clearHistoryBtn">🗑 Clear History</button>
+            </a>
+        </div>
+
+        <input type="text" id="historySearch" class="history-search" placeholder="🔍 Search by filename...">
+
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Original</th>
+                    <th>Detected</th>
+                    <th>Faces Found</th>
+                    <th>Time</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody id="historyTableBody">
+                {% for item in history %}
+                <tr>
+                    <td>{{ item["Original Image"] }}</td>
+                    <td>{{ item["Detected Image"] }}</td>
+                    <td>{{ item["Faces Found"] }}</td>
+                    <td>{{ item["Time"] }}</td>
+                    <td>
+                        <a href="/delete_history/{{ loop.index0 }}" onclick="return confirm('Delete this row?')">
+                            <button class="delete-row-btn">🗑</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p id="noResultsMsg" class="no-results" style="display:none;">No matching results found.</p>
+    </div>
+    {% endif %}
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
