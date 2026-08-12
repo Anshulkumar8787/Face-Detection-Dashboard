@@ -14,10 +14,10 @@ This app uses a small (~230 KB) deep-learning model called **YuNet** for accurat
 When deploying to Render, make sure this file is committed to your GitHub repo (it's small enough to commit directly — no need to .gitignore it).
 
 ## 🌐 Live Demo
-(add your Render link here after deploying)
+(https://face-detection-dashboard-6s5m.onrender.com)
 
 ## 📂 GitHub Repository
-(add your GitHub link here)
+(https://github.com/Anshulkumar8787/Face-Detection-Dashboard)
 
 ## 🚀 Features
 - Upload a photo (drag & drop or browse) OR capture one live with your webcam
