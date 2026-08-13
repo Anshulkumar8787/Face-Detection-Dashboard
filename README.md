@@ -1,3 +1,13 @@
+---
+title: Face Detection AI
+emoji: 👤
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # 👤 Face Detection AI
 
 A Flask web app that detects human faces in a photo (upload or webcam) and draws a box around each one, using OpenCV's YuNet deep-learning face detector (with a Haar Cascade fallback).
@@ -11,11 +21,13 @@ This app uses a small (~230 KB) deep-learning model called **YuNet** for accurat
    (the `models` folder already exists in this zip — just drop the file in)
 3. Run the app. If the file is missing, the app still works using an older, less accurate method (Haar Cascade) as a fallback — but for the best accuracy, always include this file.
 
+When deploying to Render, make sure this file is committed to your GitHub repo (it's small enough to commit directly — no need to .gitignore it).
+
 ## 🌐 Live Demo
-(https://face-detection-dashboard-6s5m.onrender.com)
+(add your Render link here after deploying)
 
 ## 📂 GitHub Repository
-(https://github.com/Anshulkumar8787/Face-Detection-Dashboard)
+(add your GitHub link here)
 
 ## 🚀 Features
 - Upload a photo (drag & drop or browse) OR capture one live with your webcam
