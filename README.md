@@ -21,8 +21,6 @@ This app uses a small (~230 KB) deep-learning model called **YuNet** for accurat
    (the `models` folder already exists in this zip — just drop the file in)
 3. Run the app. If the file is missing, the app still works using an older, less accurate method (Haar Cascade) as a fallback — but for the best accuracy, always include this file.
 
-When deploying to Render, make sure this file is committed to your GitHub repo (it's small enough to commit directly — no need to .gitignore it).
-
 ## 🌐 Live Demo
 (https://face-detection-dashboard-1.onrender.com)
 
